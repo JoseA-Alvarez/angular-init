@@ -41,7 +41,7 @@ export class LoginService {
       .pipe(takeUntilDestroyed())
       .subscribe((creds) => {
           this.authService.login(creds).subscribe((response) => {
-            localStorage.setItem('token', JSON.stringify(response.access_token));
+            localStorage.setItem('token', response.access_token);
             this.state.update((state) => ({...state, status: 'success'}))
           });
 

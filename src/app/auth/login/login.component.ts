@@ -31,6 +31,10 @@ import {CommonModule} from "@angular/common";
         margin: 2rem;
         color: var(--accent-darker-color);
       }
+      .container{
+        align-items: center;
+        justify-content: center;
+      }
     `,
   ],
 })
