@@ -1,10 +1,7 @@
 import { Component, effect, inject } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import {MatButton, MatButtonModule} from '@angular/material/button';
+import {MatButtonModule} from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MessageInputComponent } from './ui/message-input.component';
-import { MessageService } from '../shared/data-access/message.service';
-import { MessageListComponent } from './ui/message-list.component';
 import { AuthService } from '../shared/data-access/auth.service';
 import { Router } from '@angular/router';
 import {HttpClient} from "@angular/common/http";
@@ -25,8 +22,6 @@ import {HttpClient} from "@angular/common/http";
       </div>
   `,
   imports: [
-    MessageInputComponent,
-    MessageListComponent,
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
@@ -48,7 +43,6 @@ import {HttpClient} from "@angular/common/http";
   ],
 })
 export default class HomeComponent {
-  messageService = inject(MessageService);
   authService = inject(AuthService);
   private router = inject(Router);
   private htppClient = inject(HttpClient);

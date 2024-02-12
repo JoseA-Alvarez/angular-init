@@ -90,7 +90,7 @@ export class LoginFormComponent {
   private fb = inject(FormBuilder);
 
   loginForm = this.fb.nonNullable.group({
-    username: ['hola@hola.es'],
-    password: ['hola'],
+    username: ['adios@adios.es'],
+    password: ['adios'],
   });
 }

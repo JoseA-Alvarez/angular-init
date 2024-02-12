@@ -10,7 +10,6 @@ import {CommonModule} from "@angular/common";
   standalone: true,
   selector: 'app-login',
   template: `
-      <h1>Login</h1>
       <div class="container gradient-bg">
           @if (authService.user() === null) {
               <app-login-form
