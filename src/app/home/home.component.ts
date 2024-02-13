@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../shared/data-access/auth.service';
 import { Router } from '@angular/router';
 import {HttpClient} from "@angular/common/http";
+import {UsersComponent} from "./users/users.component";
 
 @Component({
   standalone: true,
@@ -19,12 +20,16 @@ import {HttpClient} from "@angular/common/http";
           </mat-toolbar>
           <h1>Bienvenido a Home</h1>
           <button mat-button (click)="test()">test</button>
+
+          <app-users></app-users>
+
       </div>
   `,
   imports: [
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
+    UsersComponent,
   ],
   styles: [
     `
