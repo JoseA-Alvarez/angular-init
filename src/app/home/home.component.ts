@@ -1,11 +1,9 @@
-import { Component, effect, inject } from '@angular/core';
-import { MatToolbarModule } from '@angular/material/toolbar';
+import {Component, effect, inject} from '@angular/core';
+import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { AuthService } from '../shared/data-access/auth.service';
-import { Router } from '@angular/router';
-import {HttpClient} from "@angular/common/http";
-import {UsersComponent} from "./users/users.component";
+import {MatIconModule} from '@angular/material/icon';
+import {AuthService} from '../shared/data-access/auth.service';
+import {RouterLink} from '@angular/router';
 
 @Component({
   standalone: true,
@@ -18,18 +16,14 @@ import {UsersComponent} from "./users/users.component";
                   <mat-icon>logout</mat-icon>
               </button>
           </mat-toolbar>
-          <h1>Bienvenido a Home</h1>
-          <button mat-button (click)="test()">test</button>
-
-          <app-users></app-users>
-
+          <a [routerLink]="['/users']">Users</a>
       </div>
   `,
   imports: [
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
-    UsersComponent,
+    RouterLink
   ],
   styles: [
     `
@@ -49,20 +43,12 @@ import {UsersComponent} from "./users/users.component";
 })
 export default class HomeComponent {
   authService = inject(AuthService);
-  private router = inject(Router);
-  private htppClient = inject(HttpClient);
 
   constructor() {
     effect(() => {
-      if (!this.authService.user()) {
-        this.router.navigate(['auth', 'login']);
-      }
-    });
-  }
-
-  test(){
-    this.htppClient.get('http://127.0.0.1:8000/users/?skip=0&limit=100').subscribe((data) => {
-      console.log(data);
+      // if (!this.authService.user-edit()) {
+      //   this.router.navigate(['auth', 'login']);
+      // }
     });
   }
 }

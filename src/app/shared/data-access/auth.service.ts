@@ -1,4 +1,4 @@
-import {Injectable, computed, inject, signal} from '@angular/core';
+import {computed, inject, Injectable, signal} from '@angular/core';
 import {Credentials} from '../interfaces/credentials';
 import {HttpClient} from "@angular/common/http";
 import {Observable, tap} from "rxjs";
@@ -26,20 +26,22 @@ export class AuthService {
   user = computed(() => this.state().user);
 
   constructor() {
-    // this.user$.pipe(takeUntilDestroyed()).subscribe((user) =>
+    // this.user-edit$.pipe(takeUntilDestroyed()).subscribe((user-edit) =>
     //   this.state.update((state) => ({
     //     ...state,
-    //     user,
+    //     user-edit,
     //   }))
     // );
   }
-renewToken() {
-  return this.http.post('http://localhost:8000/refresh', {refresh_token: localStorage.getItem('refresh_token')})
-    .pipe(tap((response: any) => {
-      localStorage.setItem('access_token', response.access_token);
-      localStorage.setItem('refresh_token', response.refresh_token);
-    })) as Observable<{access_token: string, refresh_token:string}>;
-}
+
+  renewToken() {
+    return this.http.post('http://localhost:8000/refresh', {refresh_token: localStorage.getItem('refresh_token')})
+      .pipe(tap((response: any) => {
+        localStorage.setItem('access_token', response.access_token);
+        localStorage.setItem('refresh_token', response.refresh_token);
+      })) as Observable<{ access_token: string, refresh_token: string }>;
+  }
+
   login(credentials: Credentials) {
     const form = new FormData();
     form.append('username', credentials.username);
@@ -49,7 +51,7 @@ renewToken() {
     return this.http.post('http://localhost:8000/login', form)
       .pipe(tap((response: any) => {
         this.state.set({user: credentials.username});
-      })) as Observable<{access_token: string, refresh_token:string}>;
+      })) as Observable<{ access_token: string, refresh_token: string }>;
   }
 
   logout() {

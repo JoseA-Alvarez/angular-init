@@ -12,6 +12,19 @@ export const routes: Routes = [
     loadComponent: () => import('./home/home.component'),
   },
   {
+    path: 'users',
+    canActivate: [isAuthenticatedGuard()],
+    children: [
+      {path: '', loadComponent: () => import('./users/users.component')},
+      {
+        path: ':id/edit',
+        loadComponent: () => import('./users/user-edit/user-edit.component').then(m => m.UserEditComponent)
+      },
+      {path: 'create', loadComponent: () => import('./users/create/create.component').then(m => m.CreateComponent)},
+
+    ],
+  },
+  {
     path: '',
     redirectTo: 'auth',
     pathMatch: 'full',
