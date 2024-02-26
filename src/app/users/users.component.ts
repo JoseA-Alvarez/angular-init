@@ -37,9 +37,7 @@ import {Router, RouterModule} from '@angular/router';
     RouterModule
   ],
   template: `
-    <a routerLink="/home">Home</a>
-
-    <a routerLink="/users/create">Create User</a>
+    <a routerLink="/home/users/create">Create User</a>
     <div *ngIf="users$ | async as users">
       <table mat-table [dataSource]="users" class="mat-elevation-z8 demo-table">
         @for (column of columns; track column) {
@@ -75,7 +73,7 @@ import {Router, RouterModule} from '@angular/router';
     }
 
     tr:nth-child(even) {
-      background-color: lightyellow;
+      background-color: #f3f3f3;
     }
   `
 })
@@ -90,6 +88,16 @@ export default class UsersComponent {
       columnDef: 'email',
       header: 'Email',
       cell: (element: User) => `${element.email}`,
+    },
+    {
+      columnDef: 'name',
+      header: 'Name',
+      cell: (element: User) => `${element.name}`,
+    },
+    {
+      columnDef: 'surname',
+      header: 'Surname',
+      cell: (element: User) => `${element.name}`,
     }
   ];
   displayedColumns = this.columns.map(c => c.columnDef);
@@ -102,11 +110,13 @@ export default class UsersComponent {
   ) as Observable<User[]>;
 
   gotoUser(id: string) {
-    this.router.navigate(['users', id, 'edit']);
+    this.router.navigate(['home', 'users', id, 'edit']);
   }
 }
 
 interface User {
   email: string,
+  name: string,
+  surname: string,
   id: number
 }

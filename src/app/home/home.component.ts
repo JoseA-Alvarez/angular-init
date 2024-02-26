@@ -3,27 +3,60 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {AuthService} from '../shared/data-access/auth.service';
-import {RouterLink} from '@angular/router';
+import {RouterLink, RouterOutlet} from '@angular/router';
+import {MatListItem, MatNavList} from "@angular/material/list";
+import {MatSidenavContainer, MatSidenavModule} from "@angular/material/sidenav";
 
 @Component({
   standalone: true,
   selector: 'app-home',
   template: `
-      <div class="container">
-          <mat-toolbar color="primary">
-              <span class="spacer"></span>
-              <button mat-icon-button (click)="authService.logout()">
-                  <mat-icon>logout</mat-icon>
-              </button>
-          </mat-toolbar>
-          <a [routerLink]="['/users']">Users</a>
-      </div>
+    <div>
+      <mat-toolbar color="primary" class="top-bar">
+        <button mat-icon-button (click)="snav.toggle()">
+          <mat-icon>lunch_dining</mat-icon>
+        </button>
+        <span class="spacer"></span>
+        <button mat-icon-button (click)="authService.logout()">
+          <mat-icon>logout</mat-icon>
+        </button>
+      </mat-toolbar>
+
+
+      <mat-sidenav-container class="example-sidenav-container">
+        <mat-sidenav #snav>
+          <mat-nav-list>
+            <a mat-list-item routerLink="/home/users">Users</a>
+          </mat-nav-list>
+        </mat-sidenav>
+
+        <mat-sidenav-content class="mat-container">
+
+          <router-outlet></router-outlet>
+
+
+        </mat-sidenav-content>
+      </mat-sidenav-container>
+
+
+      <!--      -->
+      <!--      <a [routerLink]="['/home/users']">Users</a>-->
+      <!--      <div class="container">-->
+      <!--      </div>-->
+
+
+    </div>
   `,
   imports: [
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
-    RouterLink
+    RouterLink,
+    RouterOutlet,
+    MatListItem,
+    MatSidenavContainer,
+    MatNavList,
+    MatSidenavModule
   ],
   styles: [
     `
@@ -37,7 +70,13 @@ import {RouterLink} from '@angular/router';
         box-shadow: 0px -7px 11px 0px var(--accent-color);
       }
 
+      mat-sidenav-content {
+        height: calc(100vh - 64px);
+      }
 
+      mat-nav-list {
+        width: 200px;
+      }
     `,
   ],
 })
