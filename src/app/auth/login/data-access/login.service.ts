@@ -1,8 +1,7 @@
-import {Injectable, computed, inject, signal} from '@angular/core';
+import {computed, inject, Injectable, signal} from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {EMPTY, Subject, switchMap} from 'rxjs';
-import {catchError} from 'rxjs/operators';
-import {AuthService} from "../../../shared/data-access/auth.service";
+import {Subject} from 'rxjs';
+import {AuthService, UserUI} from "../../../shared/data-access/auth.service";
 import {Credentials} from "../../../shared/interfaces/credentials";
 
 export type LoginStatus = 'pending' | 'authenticating' | 'success' | 'error';
@@ -41,8 +40,7 @@ export class LoginService {
       .pipe(takeUntilDestroyed())
       .subscribe((creds) => {
           this.authService.login(creds).subscribe((response) => {
-            localStorage.setItem('access_token', response.access_token);
-            localStorage.setItem('refresh_token', response.refresh_token);
+            this.authService.setItemInLocalStorage(response as UserUI);
             this.state.update((state) => ({...state, status: 'success'}))
           });
 

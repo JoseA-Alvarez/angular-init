@@ -3,9 +3,11 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {AuthService} from '../shared/data-access/auth.service';
-import {RouterLink, RouterOutlet} from '@angular/router';
+import {Router, RouterLink, RouterOutlet} from '@angular/router';
 import {MatListItem, MatNavList} from "@angular/material/list";
 import {MatSidenavContainer, MatSidenavModule} from "@angular/material/sidenav";
+import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
+
 
 @Component({
   standalone: true,
@@ -17,9 +19,25 @@ import {MatSidenavContainer, MatSidenavModule} from "@angular/material/sidenav";
           <mat-icon>lunch_dining</mat-icon>
         </button>
         <span class="spacer"></span>
-        <button mat-icon-button (click)="authService.logout()">
-          <mat-icon>logout</mat-icon>
+
+
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon>account_circle</mat-icon>
         </button>
+        <mat-menu #menu="matMenu">
+
+          <button mat-menu-item (click)="gotoProfile()">
+            <mat-icon>account_circle</mat-icon>
+            <span>Perfil</span>
+          </button>
+          <button mat-menu-item (click)="authService.logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Salir</span>
+          </button>
+
+        </mat-menu>
+
+
       </mat-toolbar>
 
 
@@ -56,7 +74,10 @@ import {MatSidenavContainer, MatSidenavModule} from "@angular/material/sidenav";
     MatListItem,
     MatSidenavContainer,
     MatNavList,
-    MatSidenavModule
+    MatSidenavModule,
+    MatMenu,
+    MatMenuTrigger,
+    MatMenuItem
   ],
   styles: [
     `
@@ -82,6 +103,7 @@ import {MatSidenavContainer, MatSidenavModule} from "@angular/material/sidenav";
 })
 export default class HomeComponent {
   authService = inject(AuthService);
+  router = inject(Router);
 
   constructor() {
     effect(() => {
@@ -89,5 +111,9 @@ export default class HomeComponent {
       //   this.router.navigate(['auth', 'login']);
       // }
     });
+  }
+
+  gotoProfile() {
+    this.router.navigate(['home', 'profile']);
   }
 }

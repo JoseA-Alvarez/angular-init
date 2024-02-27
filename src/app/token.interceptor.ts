@@ -2,7 +2,7 @@ import {HttpInterceptorFn} from '@angular/common/http';
 import {catchError} from "rxjs/operators";
 import {switchMap, throwError} from "rxjs";
 import {inject} from "@angular/core";
-import {AuthService} from "./shared/data-access/auth.service";
+import {AuthService, UserUI} from "./shared/data-access/auth.service";
 
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
@@ -16,17 +16,17 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authReq).pipe(
     catchError((err) => {
+      // Mirar Api
       if (err.status === 406) {
         console.log('error 406 refresco');
         return authService.renewToken().pipe(
           catchError((e) => {
-            console.info('error en refresco de token', e);
+            console.info('refresh token', e);
             authService.logout();
             return throwError(e);
           }),
           switchMap((response) => {
-              localStorage.setItem('access_token', response.access_token);
-              localStorage.setItem('refresh_token', response.refresh_token);
+              authService.setItemInLocalStorage(response as UserUI);
               return next(req.clone({
                 setHeaders: {
                   Authorization: `Bearer ${localStorage.getItem('access_token')}`

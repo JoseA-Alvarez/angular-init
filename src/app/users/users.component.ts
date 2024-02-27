@@ -16,6 +16,7 @@ import {AsyncPipe, NgIf} from "@angular/common";
 import {Observable, of, startWith} from "rxjs";
 import {catchError} from "rxjs/operators";
 import {Router, RouterModule} from '@angular/router';
+import {MatAnchor} from "@angular/material/button";
 
 
 @Component({
@@ -34,10 +35,13 @@ import {Router, RouterModule} from '@angular/router';
     MatRowDef,
     MatHeaderCellDef,
     NgIf,
-    RouterModule
+    RouterModule,
+    MatAnchor
   ],
   template: `
-    <a routerLink="/home/users/create">Create User</a>
+    <div class="actions">
+      <a mat-stroked-button routerLink="/home/users/create">Create User</a>
+    </div>
     <div *ngIf="users$ | async as users">
       <table mat-table [dataSource]="users" class="mat-elevation-z8 demo-table">
         @for (column of columns; track column) {
@@ -65,6 +69,15 @@ import {Router, RouterModule} from '@angular/router';
       > div {
         width: 50%;
       }
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      align-content: center;
+      vertical-align: middle;
+      align-items: center;
+      height: 64px;
     }
 
     tr:hover {

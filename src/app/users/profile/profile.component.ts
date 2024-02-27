@@ -1,30 +1,31 @@
-import {Component, DestroyRef, inject, Input, OnInit} from '@angular/core';
-import {RouterLink} from '@angular/router';
-import {CommonModule} from "@angular/common";
-import {HttpClient} from "@angular/common/http";
-import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
+import {Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {MatButton} from "@angular/material/button";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
-import {MatAnchor, MatButton} from "@angular/material/button";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatOption} from "@angular/material/autocomplete";
 import {MatSelect} from "@angular/material/select";
-import {rolesList} from "../types";
+import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
+import {RouterLink} from "@angular/router";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {HttpClient} from "@angular/common/http";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
-import {MatIcon} from "@angular/material/icon";
 
 @Component({
-  selector: 'app-user-edit',
+  selector: 'app-profile',
   standalone: true,
-  imports: [RouterLink, CommonModule, ReactiveFormsModule, MatLabel, MatInput, MatFormField, MatButton, MatOption, MatSelect, MatAnchor, MatIcon],
+  imports: [
+    MatButton,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    MatOption,
+    MatSelect,
+    ReactiveFormsModule,
+    RouterLink
+  ],
   template: `
     <form [formGroup]="userForm">
-      <div class="actions">
-        <a mat-button routerLink="/home/users">
-          <mat-icon>keyboard_backspace</mat-icon>
-        </a>
-        <div>Edit User</div>
-      </div>
+      <h2>Profile</h2>
       <mat-form-field>
         <mat-label for="email">Email:</mat-label>
         <input matInput id="email" type="text" formControlName="email">
@@ -46,13 +47,10 @@ import {MatIcon} from "@angular/material/icon";
       </mat-form-field>
 
       <mat-form-field>
-        <mat-label>Roles</mat-label>
-        <mat-select formControlName="roles" multiple>
-          @for (role of rolesList; track rolesList) {
-            <mat-option [value]="role">{{ role }}</mat-option>
-          }
-        </mat-select>
+        <mat-label for="other">********</mat-label>
+        <input matInput id="password" type="password" formControlName="password">
       </mat-form-field>
+
 
       <button [disabled]="!userForm.valid" mat-button mat-raised-button color="primary" type="submit"
               (click)="save()">Save
@@ -60,44 +58,19 @@ import {MatIcon} from "@angular/material/icon";
     </form>
   `,
   styles: `
-    .actions {
-      display: flex;
-      align-content: center;
-      height: 64px;
-      border-bottom: 1px solid #e0e0e0;
-
-      > div {
-        margin-left: auto;
-        margin-right: auto;
-      }
-    }
-
-    :host {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      align-items: center;
-    }
-
     form {
-      margin-top: 10px;
       display: flex;
       flex-direction: column;
       gap: 1rem;
       align-items: center;
-      width: 50%;
-      box-shadow: darkgrey 0px 16px 20px;
-      padding: 40px;
-      border-radius: 5px;
     }
 
     form > * {
-      width: 100%;
+      width: 50%;
     }
   `
 })
-export class UserEditComponent implements OnInit {
-  @Input() id = '';
+export class ProfileComponent implements OnInit {
   snackBar = inject(MatSnackBar)
   httpClient = inject(HttpClient);
   formBuilder = inject(FormBuilder);
@@ -108,13 +81,11 @@ export class UserEditComponent implements OnInit {
     surname: [''],
     name: [''],
     other: [''],
-    id: [0],
-    roles: new FormControl([], Validators.required)
+    password: ['']
   });
-  rolesList = rolesList;
 
   ngOnInit(): void {
-    this.httpClient.get(`http://localhost:8000/users/${this.id}`)
+    this.httpClient.get(`http://localhost:8000/users/profile`)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((res) => {
         this.userForm.patchValue(res);
@@ -124,13 +95,12 @@ export class UserEditComponent implements OnInit {
   }
 
   save() {
-    this.httpClient.post(`http://localhost:8000/users/${this.id}`, this.userForm.value)
+    this.httpClient.post(`http://localhost:8000/users/profile/2`, {user: this.userForm.value})
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((res) => {
         this.snackBar.open('User saved', 'Close', {duration: 5000});
       }, (err) => {
         this.snackBar.open('Error ', 'Close', {duration: 5000});
-
       });
   }
 }

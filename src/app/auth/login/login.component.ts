@@ -15,7 +15,7 @@ import {AuthService} from "../../shared/data-access/auth.service";
           [loginStatus]="loginService.status()"
           (login)="loginService.login$.next($event)"
         />
-        <a routerLink="/auth/register">Create account</a>
+        <!--        <a routerLink="/auth/register">Create account</a>-->
       } @else {
         <mat-spinner diameter="50"/>
       }

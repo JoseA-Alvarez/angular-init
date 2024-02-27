@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { LoginStatus } from '../data-access/login.service';
+import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
+import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {LoginStatus} from '../data-access/login.service';
 import {Credentials} from "../../../shared/interfaces/credentials";
 
 @Component({
@@ -37,10 +37,11 @@ import {Credentials} from "../../../shared/interfaces/credentials";
         <mat-icon matPrefix>lock</mat-icon>
       </mat-form-field>
 
-      @if (loginStatus === 'error'){
-      <mat-error>Could not log you in with those details.</mat-error>
-      } @if(loginStatus === 'authenticating'){
-      <mat-spinner diameter="50"></mat-spinner>
+      @if (loginStatus === 'error') {
+        <mat-error>Could not log you in with those details.</mat-error>
+      }
+      @if (loginStatus === 'authenticating') {
+        <mat-spinner diameter="50"></mat-spinner>
       }
 
       <button
@@ -84,13 +85,13 @@ import {Credentials} from "../../../shared/interfaces/credentials";
   ],
 })
 export class LoginFormComponent {
-  @Input({ required: true }) loginStatus!: LoginStatus;
+  @Input({required: true}) loginStatus!: LoginStatus;
   @Output() login = new EventEmitter<Credentials>();
 
   private fb = inject(FormBuilder);
 
   loginForm = this.fb.nonNullable.group({
-    username: ['adios@adios.es'],
-    password: ['adios'],
+    username: ['prueba@prueba.es'],
+    password: ['prueba@prueba.es'],
   });
 }

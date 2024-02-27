@@ -7,7 +7,10 @@ import {provideHttpClient, withInterceptors} from "@angular/common/http";
 import {tokenInterceptor} from "./token.interceptor";
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes, withComponentInputBinding()), provideAnimations(), provideHttpClient(withInterceptors([
-    tokenInterceptor
-  ]))]
+  providers: [provideRouter(routes,
+    withComponentInputBinding()),
+    provideAnimations(),
+    provideHttpClient(withInterceptors([
+      tokenInterceptor
+    ]))]
 };

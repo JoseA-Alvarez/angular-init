@@ -11,22 +11,28 @@ export const routes: Routes = [
     canActivate: [isAuthenticatedGuard()],
     loadComponent: () => import('./home/home.component'),
     children:
-      [{
-        path: 'users',
-        canActivate: [isAuthenticatedGuard()],
-        children: [
-          {path: '', loadComponent: () => import('./users/users.component')},
-          {
-            path: ':id/edit',
-            loadComponent: () => import('./users/user-edit/user-edit.component').then(m => m.UserEditComponent)
-          },
-          {
-            path: 'create',
-            loadComponent: () => import('./users/create/user-create.component').then(m => m.UserCreateComponent)
-          },
+      [
+        {
+          path: 'profile',
+          canActivate: [isAuthenticatedGuard()],
+          loadComponent: () => import('./users/profile/profile.component').then(m => m.ProfileComponent)
+        },
+        {
+          path: 'users',
+          canActivate: [isAuthenticatedGuard()],
+          children: [
+            {path: '', loadComponent: () => import('./users/users.component')},
+            {
+              path: ':id/edit',
+              loadComponent: () => import('./users/user-edit/user-edit.component').then(m => m.UserEditComponent)
+            },
+            {
+              path: 'create',
+              loadComponent: () => import('./users/create/user-create.component').then(m => m.UserCreateComponent)
+            },
 
-        ],
-      }]
+          ],
+        }]
   },
   {
     path: '',

@@ -4,11 +4,6 @@ import {HttpClient} from "@angular/common/http";
 import {Observable, tap} from "rxjs";
 import {Router} from '@angular/router';
 
-
-interface AuthState {
-  user: unknown;
-}
-
 @Injectable({
   providedIn: 'root',
 })
@@ -17,6 +12,7 @@ export class AuthService {
   // sources
   http = inject(HttpClient)
   router = inject(Router);
+
   // state
   private state = signal<any>({
     user: null,
@@ -25,21 +21,20 @@ export class AuthService {
   // selectors
   user = computed(() => this.state().user);
 
-  constructor() {
-    // this.user-edit$.pipe(takeUntilDestroyed()).subscribe((user-edit) =>
-    //   this.state.update((state) => ({
-    //     ...state,
-    //     user-edit,
-    //   }))
-    // );
-  }
 
   renewToken() {
-    return this.http.post('http://localhost:8000/refresh', {refresh_token: localStorage.getItem('refresh_token')})
-      .pipe(tap((response: any) => {
-        localStorage.setItem('access_token', response.access_token);
-        localStorage.setItem('refresh_token', response.refresh_token);
+    return (this.http.post('http://localhost:8000/refresh',
+      {refresh_token: localStorage.getItem('refresh_token')}) as Observable<UserUI>)
+      .pipe(tap((response: UserUI) => {
+        this.setItemInLocalStorage(response);
       })) as Observable<{ access_token: string, refresh_token: string }>;
+  }
+
+  setItemInLocalStorage(userUI: UserUI) {
+    localStorage.setItem('access_token', userUI.access_token);
+    localStorage.setItem('refresh_token', userUI.refresh_token);
+    localStorage.setItem('user', JSON.stringify(userUI));
+    this.state.set({user: userUI});
   }
 
   login(credentials: Credentials) {
@@ -55,21 +50,25 @@ export class AuthService {
   }
 
   logout() {
+    this.state.set({user: null});
+
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
+    localStorage.removeItem('user');
+
     this.router.navigate(['/auth/login']);
 
   }
+}
 
-  createAccount(credentials: Credentials) {
-    // return from(
-    //   defer(() =>
-    //     createUserWithEmailAndPassword(
-    //       this.auth,
-    //       credentials.email,
-    //       credentials.password
-    //     )
-    //   )
-    // );
-  }
+export interface AuthState {
+  user: unknown;
+}
+
+export interface UserUI {
+  email: string;
+  name: string;
+  roles: string[];
+  access_token: string;
+  refresh_token: string;
 }
